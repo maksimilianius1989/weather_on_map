@@ -8,6 +8,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "mytag";
+
     Map mMap;
     SeekBar mSeekBar;
     RelativeLayout insertMap;
@@ -27,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         mMap.tvTisDay = tvThisDay;
         insertMap = findViewById(R.id.insertMap);
         insertMap.addView(mMap);
-
-        Log.v("ss", "ss");
+        Log.v(TAG, "111");
     }
+
+
 }

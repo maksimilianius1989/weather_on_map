@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Map extends View {
     public static final String TAG = "mytag";
@@ -40,6 +43,7 @@ public class Map extends View {
 
     public ArrayList<City> mCities;
     public ArrayList<Weather> mWeathers;
+    public ArrayMap<String, ArrayList> citiesData;
 
     int resBeginMapX = 0;
     int resBeginMapY = 0;
@@ -72,6 +76,8 @@ public class Map extends View {
 
     public Map(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        this.citiesData = new ArrayMap<>();
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
@@ -219,7 +225,7 @@ public class Map extends View {
                     fontPaint
             );
             canvas.drawText(
-                    String.valueOf(city.getDayTemp()) + " / " + String.valueOf(city.getNightTemp()) + " C°",
+                    String.valueOf(city.getNightTemp()) + " / " + String.valueOf(city.getDayTemp()) + " C°",
                     x + city.getX() - 20,
                     y + city.getY() + 40,
                     fontPaint
@@ -286,6 +292,7 @@ public class Map extends View {
                 tvTisDay.setText(weather.getDtTxt().toString());
                 break;
             }
+            mSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         }
     }
 
@@ -293,8 +300,9 @@ public class Map extends View {
         try {
             boolean isRenderFirst = false;
             this.mWeathers = new ArrayList<>();
-
+            JSONObject JSONCityObj = forecast.getJSONObject("city");
             JSONArray list = forecast.getJSONArray("list");
+
             for (int i = 0; i < list.length(); i++) {
                 JSONObject item = list.getJSONObject(i);
                 JSONObject main = item.getJSONObject("main");
@@ -315,7 +323,6 @@ public class Map extends View {
                 this.mWeathers.add(new Weather(dtTxt, tempMin, tempMax, weatherMainSt, cloudsAll, windSpeed, windDeg));
 
                 if (!isRenderFirst) {
-                    JSONObject JSONCityObj = forecast.getJSONObject("city");
                     isRenderFirst = true;
                     for (City city : mCities) {
                         if (city.getName().equals(JSONCityObj.getString("name"))) {
@@ -325,12 +332,54 @@ public class Map extends View {
                     }
                 }
             }
+
+            citiesData.put(JSONCityObj.getString("name"), this.mWeathers);
             invalidate();
 
-            mSeekBar.setMax(list.length());
+            mSeekBar.setMax(list.length() - 1);
         }
         catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
+
+    private void setNewTempInCity(int numberTime) {
+        Log.v(TAG, "*****************START**********");
+        for (String cityN : citiesData.keySet()) {
+            Log.v(TAG, "City name => " + cityN);
+            ArrayList cities = citiesData.get(cityN);
+            Weather w = (Weather) cities.get(numberTime);
+            Log.v(TAG, "getDayTemp => " + w.getDtTxt());
+
+            for (City city : mCities) {
+                if (city.getName().equals(cityN)) {
+                    float max = Float.valueOf(String.valueOf(w.getTempMax()));
+                    float min = Float.valueOf(String.valueOf(w.getTempMin()));
+                    city.setDayTemp(max);
+                    city.setNightTemp(min);
+                }
+                tvTisDay.setText(w.getDtTxt());
+            }
+        }
+        Log.v(TAG, "*****************END**********");
+        invalidate();
+    }
+
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            Log.v(TAG, String.valueOf(seekBar.getProgress()));
+            setNewTempInCity(seekBar.getProgress());
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            Log.v(TAG, "333");
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            Log.v(TAG, "444");
+        }
+    };
 }
