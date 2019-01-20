@@ -1,0 +1,34 @@
+<application>
+  <component name="DimensionService">
+    <location key="WELCOME_SCREEN.0.0.1920.1080" x="962" y="440" />
+    <location key="FileChooserDialogImpl.0.0.1920.1080" x="932" y="295" />
+    <location key="SettingsEditor.0.0.1920.1080" x="590" y="146" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.1920.1080" x="660" y="346" />
+    <location key="deploy.picker.dialog.0.0.1920.1080" x="444" y="250" />
+    <location key="new project wizard.0.0.1920.1080" x="632" y="145" />
+    <location key="#Project_Structure.0.0.1920.1080" x="0" y="0" />
+    <location key="#com.intellij.execution.impl.EditConfigurationsDialog.0.0.1920.1080" x="414" y="176" />
+    <location key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1.0.0.1920.1080" x="723" y="265" />
+    <location key="#Browse_JetBrains_Plugins_.0.0.1920.1080" x="540" y="177" />
+    <location key="#Plugins.0.0.1920.1080" x="552" y="180" />
+    <location key="#com.intellij.ide.util.MemberChooser.0.0.1920.1080" x="765" y="212" />
+    <location key="edit.logcat.filter.dialog.dimensions.0.0.1920.1080" x="702" y="381" />
+    <location key="#Menus_and_Toolbars.0.0.1920.1080" x="756" y="287" />
+    <location key="IdeErrosDialog.0.0.1920.1080" x="589" y="363" />
+    <location key="deploy.picker.dialog.1920.0.1920.1080" x="2560" y="289" />
+    <location key="SettingsEditor.1920.0.1920.1080" x="2357" y="179" />
+    <location key="AndroidCreateResourceFileDialog.1920.0.1920.1080" x="2460" y="296" />
+    <location key="AndroidCreateResourceDirectoryDialog.1920.0.1920.1080" x="2460" y="296" />
+    <location key="#com.intellij.execution.impl.EditConfigurationsDialog.1920.0.1920.1080" x="2334" y="196" />
+    <location key="#com.intellij.ide.util.MemberChooser.1920.0.1920.1080" x="2685" y="247" />
+    <location key="#com.intellij.ide.util.TreeClassChooserDialog.1920.0.1920.1080" x="2375" y="322" />
+    <location key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2.1920.0.1920.1080" x="2627" y="328" />
+    <location key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1.1920.0.1920.1080" x="2643" y="418" />
+    <location key="#Auto_Import.1920.0.1920.1080" x="2652" y="262" />
+    <location key="find.popup.1920.0.1920.1080" x="2693" y="111" />
+    <location key="com.android.tools.idea.gradle.structure.editors.MavenDependencyLookupDialog.1920.0.1920.1080" x="2559" y="374" />
+    <location key="#Project_Structure.1920.0.1920.1080" x="2462" y="172" />
+    <location key="ProcessPopupWindow.1920.0.1920.1080" x="3358" y="956" />
+    <location key="FileChooserDialogImpl.1920.0.1920.1080" x="2660" y="274" />
+    <location key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog.1920.0.1920.1080" x="2610" y="273" />
+    <location key="CommitChangelistDialog2.192

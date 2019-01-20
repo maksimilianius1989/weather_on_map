@@ -1,0 +1,172 @@
+package com.deitel.movingbitmap;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
+public class MainActivity extends Activity
+{
+    public static final String TAG = "Mytag";
+    public ImageView imageView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        DrawingView dv = new DrawingView(this, imageView);
+        setContentView(dv);
+    }
+
+    class DrawingView extends View {
+        Bitmap cityMap;
+        Bitmap cityPoint;
+
+        public ArrayList<City> mCities;
+
+        int resBeginMapX = 0;
+        int resBeginMapY = 0;
+
+        int x = 0;
+        int y = 0;
+        int startTouchX = 0;
+        int startTouchY = 0;
+        int touchEndX = 0;
+        int touchEndY = 0;
+        int touchResoultX = 0;
+        int touchResoultY = 0;
+
+        int bmpWidth = 0;
+        int bmpHeight = 0;
+        int bmpEndX = 0;
+        int bmpEndY = 0;
+
+
+        Paint fontPaint;
+        String text2 = "Test width text";
+        int fontSize = 20;
+        float[] widths;
+        float width2;
+
+        public DrawingView(Context context, ImageView im)
+        {
+            super(context);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+
+            cityMap = BitmapFactory.decodeResource(context.getResources(), R.drawable.map_ua, options);
+            cityPoint = BitmapFactory.decodeResource(context.getResources(), R.drawable.city_point, options);
+
+            mCities = new ArrayList<>();
+            mCities.add(new City("Vinnytsia", 425, 345, -4, -2));
+            mCities.add(new City("Lutsk", 217, 122, -2, -4));
+            mCities.add(new City("Dnipro", 800, 370, -5, -5));
+            mCities.add(new City("Donetsk", 980, 400, -7, -6));
+            mCities.add(new City("Zhytomyr", 410, 170, -4, -4));
+            mCities.add(new City("Ivano-Frankivsk", 170, 350, 4, 2));
+            mCities.add(new City("Kyiv", 520, 210, 6, 22));
+            mCities.add(new City("Kropyvnytskyi", 656, 390, 11, 10));
+            mCities.add(new City("Lviv", 140, 240, 7, 4));
+            mCities.add(new City("Odessa", 510, 515, 3, 3));
+            mCities.add(new City("Poltava", 730, 260, 2, -2));
+            mCities.add(new City("Rivne", 310, 120, 7, 34));
+            mCities.add(new City("Sumy", 745, 150, 2, 1));
+            mCities.add(new City("Ternopil", 226, 270, 41, 21));
+            mCities.add(new City("Kharkiv", 900, 260, 21, 12));
+            mCities.add(new City("Kherson", 735, 545, 11, 10));
+            mCities.add(new City("Khmelnytskyi", 320, 250, 21, 2));
+            mCities.add(new City("Cherkasy", 567, 322, 2, 3));
+            mCities.add(new City("Chernihiv", 630, 105, 4, 5));
+            mCities.add(new City("Chernivtsi", 226, 382, 6, 7));
+            mCities.add(new City("Uzhhorod", 95, 356, 8, 9));
+            mCities.add(new City("Zaporizhzhia", 860, 500, 2, 6));
+            mCities.add(new City("Luhansk", 1050, 305, 5, 3));
+            mCities.add(new City("Mykolaiv", 635, 485, -4, 4));
+
+
+            fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            fontPaint.setTextSize(fontSize);
+            fontPaint.setStyle(Paint.Style.STROKE);
+
+            // ширина текста
+            width2 = fontPaint.measureText(text2);
+
+            // посимвольная ширина
+            widths = new float[text2.length()];
+            fontPaint.getTextWidths(text2, widths);
+
+            /* ************** запрос к погоде *************** */
+   /*         URL url = createURL("Kiev");
+            GetWeatherTask getWeatherTask = new GetWeatherTask();
+            getWeatherTask.execute(url);*/
+        }
+
+        private URL createURL(String city) {
+            String apiKey = getString(R.string.api_key);
+            String baseUrl = getString(R.string.web_service_url);
+
+            try {
+                // create URL for specified city and imperial units (Fahrenheit)
+                String urlString = baseUrl + URLEncoder.encode(city, "UTF-8") +
+                        "&units=metric&lang=ua&APPID=" + apiKey;
+                Log.d(TAG, urlString);
+                return new URL(urlString);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null; // URL was malformed
+        }
+
+        public boolean onTouchEvent(MotionEvent event)
+        {
+            switch(event.getAction())
+            {
+                case MotionEvent.ACTION_DOWN:
+                    startTouchX = (int) event.getX();
+                    startTouchY = (int) event.getY();
+                    bmpWidth = cityMap.getWidth();
+                    bmpHeight = cityMap.getHeight();
+                    bmpEndX = x + bmpWidth;
+                    bmpEndY = y + bmpHeight;
+
+                    /* ************** запрос к погоде *************** */
+                    URL url = createURL("Kiev");
+                    GetWeatherTask getWeatherTask = new GetWeatherTask();
+                    getWeatherTask.execute(url);
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touchEndX =(int)event.getX();
+                    touchEndY =(int)event.getY();
+
+                    if (touchEndX != startTouchX || touchEndY != startTouchY) {
+                 
