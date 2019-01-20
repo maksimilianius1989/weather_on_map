@@ -1,5 +1,6 @@
 package com.vimax.weatheronmap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +30,14 @@ import java.util.ArrayList;
 
 public class Map extends View {
     public static final String TAG = "mytag";
-    public ImageView imageView;
+
+    SeekBar mSeekBar;
 
     Bitmap cityMap;
     Bitmap cityPoint;
 
     public ArrayList<City> mCities;
+    public ArrayList<Weather> mWeathers;
 
     int resBeginMapX = 0;
     int resBeginMapY = 0;
@@ -63,6 +68,8 @@ public class Map extends View {
 
     public Map(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mSeekBar = ((Activity) context).findViewById(R.id.sbTime);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
@@ -150,11 +157,6 @@ public class Map extends View {
                 bmpHeight = cityMap.getHeight();
                 bmpEndX = x + bmpWidth;
                 bmpEndY = y + bmpHeight;
-
-                /* ************** запрос к погоде *************** */
-                URL url = createURL("Kiev");
-                GetWeatherTask getWeatherTask = new GetWeatherTask();
-                getWeatherTask.execute(url);
 
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -275,22 +277,40 @@ public class Map extends View {
 
     private void convertJSONtoArrayList(JSONObject forecast) {
         try {
+            mSeekBar = (SeekBar) findViewById(R.id.sbTime);
+            this.mWeathers = new ArrayList<>();
+
             JSONObject JSONCityObj = forecast.getJSONObject("city");
 
             JSONArray list = forecast.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
-                JSONObject day = list.getJSONObject(i);
-                JSONObject main = day.getJSONObject("main");
-                for (City city : mCities) {
+                JSONObject item = list.getJSONObject(i);
+                JSONObject main = item.getJSONObject("main");
+                JSONArray weatherMain = item.getJSONArray("weather");
+                JSONObject clouds = item.getJSONObject("clouds");
+                JSONObject wind = item.getJSONObject("wind");
+
+                JSONObject weatherMain1 = weatherMain.getJSONObject(0);
+
+                String dtTxt = item.getString("dt_txt");
+                String weatherMainSt = weatherMain1.getString("main");
+                Double tempMin = main.getDouble("temp_min");
+                Double tempMax = main.getDouble("temp_max");
+                Double cloudsAll = clouds.getDouble("all");
+                Double windSpeed = wind.getDouble("speed");
+                Double windDeg = wind.getDouble("deg");
+
+                this.mWeathers.add(new Weather(dtTxt, tempMin, tempMax, weatherMainSt, cloudsAll, windSpeed, windDeg));
+
+/*                for (City city : mCities) {
                     if (city.getName().equals(JSONCityObj.getString("name"))) {
                         city.setDayTemp((float) main.getDouble("temp_max"));
                         city.setNightTemp((float) main.getDouble("temp_min"));
-                        break;
                     }
-                }
-                break;
+                }*/
             }
             invalidate();
+//            mSeekBar.setScrollBarSize(list.length());
         }
         catch (JSONException exception) {
             exception.printStackTrace();
