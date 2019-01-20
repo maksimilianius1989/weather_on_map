@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +32,8 @@ import java.util.ArrayList;
 public class Map extends View {
     public static final String TAG = "mytag";
 
-    SeekBar mSeekBar;
+    public SeekBar mSeekBar;
+    public TextView tvTisDay;
 
     Bitmap cityMap;
     Bitmap cityPoint;
@@ -66,10 +68,10 @@ public class Map extends View {
     String apiKey = "";
     String webServiceUrl = "";
 
+    boolean setFirstTempInfo = false;
+
     public Map(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        mSeekBar = ((Activity) context).findViewById(R.id.sbTime);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
@@ -272,15 +274,25 @@ public class Map extends View {
         @Override
         protected void onPostExecute(JSONObject weather) {
             convertJSONtoArrayList(weather); // repopulate weatherList
+            setTextInfo();
+        }
+    }
+
+    private void setTextInfo () {
+        if (!setFirstTempInfo) {
+            setFirstTempInfo = true;
+            Log.v(TAG, "WOrking set info");
+            for (Weather weather : mWeathers) {
+                tvTisDay.setText(weather.getDtTxt().toString());
+                break;
+            }
         }
     }
 
     private void convertJSONtoArrayList(JSONObject forecast) {
         try {
-            mSeekBar = (SeekBar) findViewById(R.id.sbTime);
+            boolean isRenderFirst = false;
             this.mWeathers = new ArrayList<>();
-
-            JSONObject JSONCityObj = forecast.getJSONObject("city");
 
             JSONArray list = forecast.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
@@ -302,15 +314,20 @@ public class Map extends View {
 
                 this.mWeathers.add(new Weather(dtTxt, tempMin, tempMax, weatherMainSt, cloudsAll, windSpeed, windDeg));
 
-/*                for (City city : mCities) {
-                    if (city.getName().equals(JSONCityObj.getString("name"))) {
-                        city.setDayTemp((float) main.getDouble("temp_max"));
-                        city.setNightTemp((float) main.getDouble("temp_min"));
+                if (!isRenderFirst) {
+                    JSONObject JSONCityObj = forecast.getJSONObject("city");
+                    isRenderFirst = true;
+                    for (City city : mCities) {
+                        if (city.getName().equals(JSONCityObj.getString("name"))) {
+                            city.setDayTemp((float) main.getDouble("temp_max"));
+                            city.setNightTemp((float) main.getDouble("temp_min"));
+                        }
                     }
-                }*/
+                }
             }
             invalidate();
-//            mSeekBar.setScrollBarSize(list.length());
+
+            mSeekBar.setMax(list.length());
         }
         catch (JSONException exception) {
             exception.printStackTrace();
