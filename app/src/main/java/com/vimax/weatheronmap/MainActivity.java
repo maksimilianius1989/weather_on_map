@@ -12,6 +12,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "mytag";
 
@@ -20,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout insertMap;
     TextView tvThisDay;
 
+    private AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
             insertMap = findViewById(R.id.insertMap);
             insertMap.addView(mMap);
             Log.v(TAG, "111");
+
+            MobileAds.initialize(this, "ca-app-pub-9091567331130676~8874024060");
+
+            mAdView = findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "Потрібен доступ до Інтернету!",

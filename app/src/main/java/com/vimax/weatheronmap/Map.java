@@ -73,6 +73,7 @@ public class Map extends View {
     private BitmapFactory.Options options;
 
     Bitmap mainWeatherForCanvas;
+    Bitmap bmpWind;
 
     public Map(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -222,12 +223,19 @@ public class Map extends View {
 
         for (City city : this.mCities) {
             canvas.drawBitmap(cityPoint, x + city.getX(), y + city.getY(), paint);
+
             if (city.getMainWeather() != null) {
                 createMainWeather(city.getMainWeather());
                 if (mainWeatherForCanvas != null) {
                     canvas.drawBitmap(mainWeatherForCanvas, x + city.getX() - 30, y + city.getY() - 10, paint);
                 }
             }
+
+            createWind(city.getWindSpeed());
+            if (bmpWind != null) {
+                canvas.drawBitmap(bmpWind, x + city.getX(), y + city.getY() - 30, paint);
+            }
+
             canvas.drawText(String.valueOf(
                     city.getRegion()),
                     x + city.getX() - 40,
@@ -262,6 +270,13 @@ public class Map extends View {
             case City.WEATHER_SNOW:
                 mainWeatherForCanvas = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_frost, options);
                 break;
+        }
+    }
+
+    private void createWind(int wind) {
+        bmpWind = null;
+        if (wind > 5) {
+            bmpWind = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_wind, options);
         }
     }
 

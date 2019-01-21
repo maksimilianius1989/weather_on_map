@@ -36,10 +36,23 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="49dp"
         android:max="8"
         android:progress="0" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-9091567331130676/6112129351">
+    </com.google.android.gms.ads.AdView>
 
     <RelativeLayout
         android:layout_width="123dp"
@@ -137,6 +150,7 @@
             android:layout_alignTop="@+id/imageView4"
             android:layout_toEndOf="@+id/imageView5"
             android:text="Вітер" />
+
     </RelativeLayout>
 
 </RelativeLayout>
