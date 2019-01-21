@@ -1,6 +1,5 @@
 package com.vimax.weatheronmap;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -29,8 +26,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 
 public class Map extends View {
     public static final String TAG = "mytag";
@@ -89,31 +84,33 @@ public class Map extends View {
         webServiceUrl = context.getResources().getString(R.string.web_service_url);
 
         mCities = new ArrayList<>();
-        mCities.add(new City("Vinnytsia", 425, 345, 0, 0));
-        mCities.add(new City("Lutsk", 217, 122,  0,  0));
-        mCities.add(new City("Dnipro", 800, 370,  0,  0));
-        mCities.add(new City("Donetsk", 980, 400,  0,  0));
-        mCities.add(new City("Zhytomyr", 410, 170,  0,  0));
-        mCities.add(new City("Ivano-Frankivsk", 170, 350, 0, 0));
-        mCities.add(new City("Kiev", 520, 210, 0, 0));
-        mCities.add(new City("Kropyvnytskyi", 656, 390, 0, 0));
-        mCities.add(new City("Lviv", 140, 240, 0, 0));
-        mCities.add(new City("Bilhorod-Dnistrovskyi", 500, 580, 0, 0)); // не работает Одесса
-        mCities.add(new City("Poltava", 730, 260, 0,  0));
-        mCities.add(new City("Rivne", 310, 120, 0, 0));
-        mCities.add(new City("Sumy", 745, 150, 0, 0));
-        mCities.add(new City("Ternopil", 226, 270, 0, 0));
-        mCities.add(new City("Kharkiv", 900, 260, 0, 0));
-        mCities.add(new City("Kherson", 735, 545, 0, 0));
-        mCities.add(new City("Khmelnytskyi", 320, 250, 0, 0));
-        mCities.add(new City("Cherkasy", 567, 322, 0, 0));
-        mCities.add(new City("Chernihiv", 630, 105, 0, 0));
-        mCities.add(new City("Chernivtsi", 226, 382, 0, 0));
-        mCities.add(new City("Uzhhorod", 95, 356, 0, 0));
-        mCities.add(new City("Zaporizhzhia", 860, 500, 0, 0));
-        mCities.add(new City("Luhansk", 1050, 305, 0, 0));
-        mCities.add(new City("Mykolaiv", 635, 485,  0, 0));
-        mCities.add(new City("Simferopol", 750, 670,  0, 0));
+        mCities.add(new City("Vinnytsia", 425, 345, 0, 0, 0, "Вінницька обл."));
+        mCities.add(new City("Lutsk", 217, 122,  0,  0, 0, "Волинська обл."));
+        mCities.add(new City("Dnipro", 800, 370,  0,  0, 0, "Дніпропетровська обл."));
+        mCities.add(new City("Donetsk", 980, 400,  0,  0, 0, "Донецька обл."));
+        mCities.add(new City("Zhytomyr", 410, 170,  0,  0, 0, "Запоріжська обл."));
+        mCities.add(new City("Ivano-Frankivsk", 170, 340, 0, 0, 0, "Івано-Франківська обл."));
+        mCities.add(new City("Kiev", 520, 210, 0, 0, 0, "Київська обл."));
+        mCities.add(new City("Kropyvnytskyi", 656, 390, 0, 0, 0, "Кіровоградська обл."));
+        mCities.add(new City("Lviv", 140, 240, 0, 0, 0, "Львівська обл."));
+        mCities.add(new City("Bilhorod-Dnistrovskyi", 530, 550, 0, 0, 0, "Одеська обл.")); // не работает Одесса
+        mCities.add(new City("Poltava", 730, 260, 0,  0, 0, "Вінницька обл."));
+        mCities.add(new City("Rivne", 310, 110, 0, 0, 0, "Рівненська обл."));
+        mCities.add(new City("Sumy", 745, 150, 0, 0, 0, "Сумська обл."));
+        mCities.add(new City("Ternopil", 226, 270, 0, 0, 0, "Тернопільська обл."));
+        mCities.add(new City("Kharkiv", 900, 260, 0, 0, 0, "Харківська обл."));
+        mCities.add(new City("Kherson", 735, 545, 0, 0, 0, "Херсонська обл."));
+        mCities.add(new City("Khmelnytskyi", 320, 250, 0, 0, 0, "Хмельницька обл."));
+        mCities.add(new City("Cherkasy", 567, 322, 0, 0, 0, "Черкаська обл."));
+        mCities.add(new City("Chernihiv", 630, 105, 0, 0, 0, "Чернігівська обл."));
+        mCities.add(new City("Chernivtsi", 226, 382, 0, 0, 0, "Чернівецька обл."));
+        mCities.add(new City("Uzhhorod", 95, 356, 0, 0, 0, "Закарпатська обл."));
+        mCities.add(new City("Zaporizhzhia", 860, 500, 0, 0, 0, "Запоріжська обл."));
+        mCities.add(new City("Luhansk", 1050, 305, 0, 0, 0, "Луганська обл."));
+        mCities.add(new City("Mykolaiv", 635, 485,  0, 0, 0, "Миколаївська обл."));
+        mCities.add(new City("Simferopol", 750, 670,  0, 0, 0, "АР Крим обл."));
+        mCities.add(new City("Lutugino", 1030, 370,  0, 0, 0, "Георгівка"));
+        mCities.add(new City("Uman", 500, 330,  0, 0, 0, "Умань"));
 
 
         fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -219,13 +216,13 @@ public class Map extends View {
         for (City city : this.mCities) {
             canvas.drawBitmap(cityPoint, x + city.getX(), y + city.getY(), paint);
             canvas.drawText(String.valueOf(
-                    city.getName()),
-                    x + city.getX() - 10,
+                    city.getRegion()),
+                    x + city.getX() - 40,
                     y + city.getY() - 10,
                     fontPaint
             );
             canvas.drawText(
-                    String.valueOf(city.getNightTemp()) + " / " + String.valueOf(city.getDayTemp()) + " C°",
+                    String.valueOf(city.getThisTemp()) + " C°",
                     x + city.getX() - 20,
                     y + city.getY() + 40,
                     fontPaint
@@ -316,18 +313,20 @@ public class Map extends View {
                 String weatherMainSt = weatherMain1.getString("main");
                 Double tempMin = main.getDouble("temp_min");
                 Double tempMax = main.getDouble("temp_max");
+                Double temp = main.getDouble("temp");
                 Double cloudsAll = clouds.getDouble("all");
                 Double windSpeed = wind.getDouble("speed");
                 Double windDeg = wind.getDouble("deg");
 
-                this.mWeathers.add(new Weather(dtTxt, tempMin, tempMax, weatherMainSt, cloudsAll, windSpeed, windDeg));
+                this.mWeathers.add(new Weather(dtTxt, tempMin, tempMax, weatherMainSt, cloudsAll, windSpeed, windDeg, temp));
 
                 if (!isRenderFirst) {
                     isRenderFirst = true;
                     for (City city : mCities) {
                         if (city.getName().equals(JSONCityObj.getString("name"))) {
-                            city.setDayTemp((float) main.getDouble("temp_max"));
-                            city.setNightTemp((float) main.getDouble("temp_min"));
+                            city.setTempMax((float) main.getDouble("temp_max"));
+                            city.setTempMin((float) main.getDouble("temp_min"));
+                            city.setThisTemp((float) main.getDouble("temp"));
                         }
                     }
                 }
@@ -349,14 +348,16 @@ public class Map extends View {
             Log.v(TAG, "City name => " + cityN);
             ArrayList cities = citiesData.get(cityN);
             Weather w = (Weather) cities.get(numberTime);
-            Log.v(TAG, "getDayTemp => " + w.getDtTxt());
+            Log.v(TAG, "getTempMax => " + w.getDtTxt());
 
             for (City city : mCities) {
                 if (city.getName().equals(cityN)) {
                     float max = Float.valueOf(String.valueOf(w.getTempMax()));
                     float min = Float.valueOf(String.valueOf(w.getTempMin()));
-                    city.setDayTemp(max);
-                    city.setNightTemp(min);
+                    float thisTemp = Float.valueOf(String.valueOf(w.getThisTemp()));
+                    city.setTempMax(max);
+                    city.setTempMin(min);
+                    city.setThisTemp(thisTemp);
                 }
                 tvTisDay.setText(w.getDtTxt());
             }
