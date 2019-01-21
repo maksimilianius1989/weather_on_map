@@ -69,12 +69,19 @@ public class Map extends View {
 
     boolean setFirstTempInfo = false;
 
+    private Context _context;
+    private BitmapFactory.Options options;
+
+    Bitmap mainWeatherForCanvas;
+
     public Map(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        this._context = context;
+
         this.citiesData = new ArrayMap<>();
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
+        options = new BitmapFactory.Options();
         options.inScaled = false;
 
         cityMap = BitmapFactory.decodeResource(context.getResources(), R.drawable.map_ua, options);
@@ -215,6 +222,12 @@ public class Map extends View {
 
         for (City city : this.mCities) {
             canvas.drawBitmap(cityPoint, x + city.getX(), y + city.getY(), paint);
+            if (city.getMainWeather() != null) {
+                createMainWeather(city.getMainWeather());
+                if (mainWeatherForCanvas != null) {
+                    canvas.drawBitmap(mainWeatherForCanvas, x + city.getX() - 30, y + city.getY() - 10, paint);
+                }
+            }
             canvas.drawText(String.valueOf(
                     city.getRegion()),
                     x + city.getX() - 40,
@@ -227,6 +240,28 @@ public class Map extends View {
                     y + city.getY() + 40,
                     fontPaint
             );
+        }
+    }
+
+    /**
+     * Рисуем погоду
+     * @param mainWeather
+     */
+    private void createMainWeather(String mainWeather) {
+        mainWeatherForCanvas = null;
+        switch (mainWeather) {
+            case City.WEATHER_CLEAR:
+                mainWeatherForCanvas = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_sun, options);
+                break;
+            case City.WEATHER_CLOUDS:
+                mainWeatherForCanvas = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_fog, options);
+                break;
+            case City.WEATHER_RAIN:
+                mainWeatherForCanvas = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_rain2, options);
+                break;
+            case City.WEATHER_SNOW:
+                mainWeatherForCanvas = BitmapFactory.decodeResource(this._context.getResources(), R.drawable.i_frost, options);
+                break;
         }
     }
 
@@ -327,6 +362,8 @@ public class Map extends View {
                             city.setTempMax((float) main.getDouble("temp_max"));
                             city.setTempMin((float) main.getDouble("temp_min"));
                             city.setThisTemp((float) main.getDouble("temp"));
+                            city.setMainWeather(weatherMainSt);
+                            city.setWindSpeed(Math.round(windSpeed.floatValue()));
                         }
                     }
                 }
@@ -358,6 +395,8 @@ public class Map extends View {
                     city.setTempMax(max);
                     city.setTempMin(min);
                     city.setThisTemp(thisTemp);
+                    city.setWindSpeed(Math.round(w.getWindSpeed().floatValue()));
+                    city.setMainWeather(w.getMainWeather());
                 }
                 tvTisDay.setText(w.getDtTxt());
             }

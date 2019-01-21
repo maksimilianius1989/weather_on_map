@@ -1,6 +1,11 @@
 package com.vimax.weatheronmap;
 
 public class City {
+    public static final String WEATHER_CLEAR = "Clear";
+    public static final String WEATHER_SNOW = "Snow";
+    public static final String WEATHER_CLOUDS = "Clouds";
+    public static final String WEATHER_RAIN = "Rain";
+
     public String name;
     private int x;
     private int y;
@@ -9,7 +14,18 @@ public class City {
     private int thisTemp;
     private String region;
 
-    public City(String name, int x, int y, int tempMax, int tempMin, int thisTemp, String region) {
+    private String mainWeather;
+    private int windSpeed;
+
+    public City(
+            String name,
+            int x,
+            int y,
+            int tempMax,
+            int tempMin,
+            int thisTemp,
+            String region
+    ) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -17,7 +33,22 @@ public class City {
         this.tempMin = tempMin;
         this.thisTemp = thisTemp;
         this.region = region;
+    }
 
+    public void setMainWeather(String name) {
+        mainWeather = name;
+    }
+
+    public void setWindSpeed(int windCount) {
+        windSpeed = windCount;
+    }
+
+    public String getMainWeather() {
+        return mainWeather;
+    }
+
+    public int getWindSpeed() {
+        return windSpeed;
     }
 
     public String getRegion() {
