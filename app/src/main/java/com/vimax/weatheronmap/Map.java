@@ -25,7 +25,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class Map extends View {
     public static final String TAG = "mytag";
@@ -59,8 +64,10 @@ public class Map extends View {
 
 
     Paint fontPaint;
+    Paint fontPaintName;
     String text2 = "Test width text";
     int fontSize = 20;
+    int fontSizeName = 10;
     float[] widths;
     float width2;
 
@@ -117,12 +124,15 @@ public class Map extends View {
         mCities.add(new City("Luhansk", 1050, 305, 0, 0, 0, "Луганська обл."));
         mCities.add(new City("Mykolaiv", 635, 485,  0, 0, 0, "Миколаївська обл."));
         mCities.add(new City("Simferopol", 750, 670,  0, 0, 0, "АР Крим обл."));
-        mCities.add(new City("Lutugino", 1030, 370,  0, 0, 0, "Георгівка"));
+        mCities.add(new City("Lutugino", 1030, 370,  0, 0, 0, "Георгіївка"));
         mCities.add(new City("Uman", 500, 330,  0, 0, 0, "Умань"));
 
 
         fontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        fontPaint.setColor(Color.RED);
+        fontPaintName = new Paint(Paint.ANTI_ALIAS_FLAG);
         fontPaint.setTextSize(fontSize);
+        fontPaintName.setTextSize(fontSizeName);
         fontPaint.setStyle(Paint.Style.STROKE);
 
         // ширина текста
@@ -223,25 +233,34 @@ public class Map extends View {
 
         for (City city : this.mCities) {
             canvas.drawBitmap(cityPoint, x + city.getX(), y + city.getY(), paint);
-
             if (city.getMainWeather() != null) {
                 createMainWeather(city.getMainWeather());
                 if (mainWeatherForCanvas != null) {
-                    canvas.drawBitmap(mainWeatherForCanvas, x + city.getX() - 30, y + city.getY() - 10, paint);
+                    canvas.drawBitmap(mainWeatherForCanvas, x + city.getX() + 15, y + city.getY() - 15, paint);
                 }
             }
 
             createWind(city.getWindSpeed());
             if (bmpWind != null) {
-                canvas.drawBitmap(bmpWind, x + city.getX(), y + city.getY() - 30, paint);
+                canvas.drawBitmap(bmpWind, x + city.getX() - 40, y + city.getY() - 10, paint);
             }
 
             canvas.drawText(String.valueOf(
                     city.getRegion()),
-                    x + city.getX() - 40,
+                    x + city.getX() - 20,
                     y + city.getY() - 10,
-                    fontPaint
+                    fontPaintName
             );
+
+            if (city.getThisTemp() > 0) {
+                fontPaint.setColor(Color.RED);
+            } else if (city.getThisTemp() == 0) {
+                fontPaint.setColor(Color.CYAN);
+            } else {
+                fontPaint.setColor(Color.BLUE);
+            }
+            fontPaint.setFakeBoldText(true);
+
             canvas.drawText(
                     String.valueOf(city.getThisTemp()) + " C°",
                     x + city.getX() - 20,
@@ -336,7 +355,33 @@ public class Map extends View {
             setFirstTempInfo = true;
             Log.v(TAG, "WOrking set info");
             for (Weather weather : mWeathers) {
-                tvTisDay.setText(weather.getDtTxt().toString());
+                String myDate = new String();
+                String dateSt = weather.getDtTxt().toString();
+                Date dateTransform;
+                Date today = new Date();
+                Date dayAfter = new Date(today.getTime() + TimeUnit.DAYS.toMillis(1));
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    dateTransform = format.parse(dateSt);
+
+                    int today1 = today.getDay();
+                    int dateTransform1 = dateTransform.getDay();
+                    int dayAfter1 = dayAfter.getDay();
+
+                    if (today.getDay() == dateTransform.getDay()){
+                        myDate += "Сьогодні ";
+                    } else if (dayAfter.getDay() == dateTransform.getDay()){
+                        myDate += "Завтра ";
+                    }
+
+
+
+                    tvTisDay.setText(myDate + dateSt);
+                    Log.v(TAG, "aa");
+                }
+                catch (Exception e) {
+                    Log.v(TAG, e.getMessage());
+                }
                 break;
             }
             mSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);

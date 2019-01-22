@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Погода на мапі України</string>
+    <string name="app_name">Погода в Україні</string>
     <string name="web_service_url">http://api.openweathermap.org/data/2.5/forecast?q=</string>
     <string name="api_key">a11d1b4bd56170d5b06f0dc20d211059</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.vimax.weatheronmap;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
@@ -30,13 +32,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+        MobileAds.initialize(this, "ca-app-pub-9091567331130676~1007335856");
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         if(this.isInternetConnect()) {
-
-            setContentView(R.layout.activity_main);
             mSeekBar = (SeekBar) findViewById(R.id.sbTime);
-
             tvThisDay = (TextView) findViewById(R.id.tvThisDay);
+            tvThisDay.setTypeface(null, Typeface.BOLD);
 
             mMap = new Map(this, null);
             mMap.mSeekBar = mSeekBar;
@@ -44,12 +50,6 @@ public class MainActivity extends AppCompatActivity {
             insertMap = findViewById(R.id.insertMap);
             insertMap.addView(mMap);
             Log.v(TAG, "111");
-
-            MobileAds.initialize(this, "ca-app-pub-9091567331130676~8874024060");
-
-            mAdView = findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "Потрібен доступ до Інтернету!",

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/colorBackground"
+    android:background="@drawable/backgorundweather"
     android:id="@+id/rlStart">
 
     <RelativeLayout
@@ -26,9 +26,9 @@
         android:layout_alignParentTop="true"
         android:padding="5dp"
         android:layout_alignParentRight="true"
-        android:background="@color/colorBackground"
+        android:textColor="@color/colorAccent"
         android:text="Day"
-        android:textSize="40dp" />
+        android:textSize="20dp" />
 
 
     <SeekBar
@@ -51,7 +51,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-9091567331130676/6112129351">
+        ads:adUnitId="ca-app-pub-9091567331130676/8096198829">
     </com.google.android.gms.ads.AdView>
 
     <RelativeLayout
@@ -114,6 +114,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/imageView4"
+            android:textColor="#ffffff"
             android:text="Сніг" />
 
         <TextView
@@ -124,6 +125,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="47dp"
             android:layout_toEndOf="@+id/imageView4"
+            android:textColor="#ffffff"
             android:text="Сонячно" />
 
         <TextView
@@ -133,6 +135,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="7dp"
             android:layout_toEndOf="@+id/imageView4"
+            android:textColor="#ffffff"
             android:text="Дощ" />
 
         <TextView
@@ -141,6 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imageView5"
             android:layout_toEndOf="@+id/imageView5"
+            android:textColor="#ffffff"
             android:text="Хмарно" />
 
         <TextView
@@ -149,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView4"
             android:layout_toEndOf="@+id/imageView5"
+            android:textColor="#ffffff"
             android:text="Вітер" />
 
     </RelativeLayout>
